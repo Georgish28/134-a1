@@ -15,8 +15,8 @@ let btn = new Button(w);
 btn.tabindex = 2;
 btn.fontSize = 14
 btn.label = "Click Me!"
-//btn.buttonHeight = 50
-//btn.buttonWidth = 100
+btn.buttonHeight = 50
+btn.buttonWidth = 100
 btn.move(12, 50)
 
 btn.onClick((sender, args) => {
