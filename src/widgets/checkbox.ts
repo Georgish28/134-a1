@@ -25,15 +25,13 @@ class CheckboxStateEventArgs extends EventArgs {
  */
 class CheckBox extends Widget {
     private _boxRect: Rect;
-    private _checkMarkGroup: any; // Using group instead of Path
+    private _checkMarkGroup: any;
     private _labelText: Text;
-    
-    // Default properties
     private defaultWidth: number = 16;
     private defaultHeight: number = 16;
     private _label: string = "Checkbox";
     private _isChecked: boolean = false;
-    private _spacing: number = 8; // Space between checkbox and label
+    private _spacing: number = 8;
     private _fontSize: number = 14;
     
     // Callback for state change event
@@ -45,14 +43,8 @@ class CheckBox extends Widget {
         // Set defaults
         this.height = this.defaultHeight;
         this.width = this.defaultWidth;
-        
-        // Set Aria role - we'll use "button" since there's no specific checkbox role in the provided enum
         this.role = RoleType.button;
-        
-        // Set default state
         this.setState(new IdleUpWidgetState());
-        
-        // Render widget
         this.render();
     }
 
@@ -62,44 +54,34 @@ class CheckBox extends Widget {
     render(): void {
         this._group = (this.parent as Window).window.group();
         
-        // Box rectangle with McLaren papaya orange colors
+        // Rectangle with papaya orange colors
         this._boxRect = this._group.rect(this.defaultWidth, this.defaultHeight)
-            .fill('#FF6A13')  // McLaren Papaya Orange
-            .stroke({ color: '#D4570D', width: 1 }) // Darker orange for border
+            .fill('#FF6A13')  // Papaya Orange
+            .stroke({ color: '#D4570D', width: 1 }) // Darker orange
             .radius(2);
         
-        // Create checkmark using lines instead of a Path
+
         this._checkMarkGroup = this._group.group();
-        
-        // Draw checkmark using two lines for the check symbol
         let line1 = this._checkMarkGroup.line(4, 8, 7, 11).stroke({ color: '#FFFFFF', width: 2, linecap: 'round' });
         let line2 = this._checkMarkGroup.line(7, 11, 12, 5).stroke({ color: '#FFFFFF', width: 2, linecap: 'round' });
         
-        // Initially hide checkmark if not checked
         this._checkMarkGroup.opacity(this._isChecked ? 1 : 0);
-        
-        // Label text with McLaren papaya orange theme
         this._labelText = this._group.text(this._label)
             .font({ size: this._fontSize, family: 'Arial' })
-            .fill('#FF6A13')  // McLaren Papaya Orange
+            .fill('#FF6A13')  // Papaya Orange
             .move(this.defaultWidth + this._spacing, 0);
         
-        // Vertically center the label with the checkbox
+
         this.centerLabelVertically();
-        
-        // Set the outer svg element
         this.outerSvg = this._group;
         
-        // Create hit area for the entire widget (checkbox + label)
         const totalWidth = this.calculateTotalWidth();
         let eventRect = this._group.rect(totalWidth, Math.max(this.defaultHeight, this._fontSize))
             .opacity(0)
             .attr('id', 0);
         
-        // Register events
         this.registerEvent(eventRect);
-        
-        // Initial update to apply default state
+
         this.update();
     }
 
@@ -129,22 +111,18 @@ class CheckBox extends Widget {
      * Updates the visual appearance after property changes
      */
     override update(): void {
-        // Update checkbox appearance based on checked state
         if (this._checkMarkGroup) {
             this._checkMarkGroup.opacity(this._isChecked ? 1 : 0);
         }
-        
-        // Update label if changed
+
         if (this._labelText) {
             this._labelText.text(this._label);
             this.centerLabelVertically();
         }
-        
-        // Update event rectangle size
+
         const totalWidth = this.calculateTotalWidth();
         const eventRect = this._group.findOne('rect[id="0"]');
         if (eventRect) {
-            // Avoid using width/height properties directly
             eventRect.attr({
                 width: totalWidth,
                 height: Math.max(this.defaultHeight, this._fontSize)
@@ -175,10 +153,8 @@ class CheckBox extends Widget {
         const previousValue = this._isChecked;
         this._isChecked = value;
         
-        // Update visual representation
         this.update();
-        
-        // Trigger state change event if value has changed
+
         if (this._isChecked !== previousValue && this.stateChangeCallback) {
             this.stateChangeCallback(this, new CheckboxStateEventArgs(this, this._isChecked));
         }
@@ -226,10 +202,8 @@ class CheckBox extends Widget {
         this.stateChangeCallback = callback;
     }
 
-    // State methods implementation
 
     override pressReleaseState(): void {
-        // Toggle checkbox when clicked
         this.toggle();
         this.idleupState();
     }
@@ -239,7 +213,6 @@ class CheckBox extends Widget {
             this._boxRect.fill('#FF6A13').stroke({ color: '#D4570D', width: 1 });
         }
         if (this._checkMarkGroup) {
-            // Update all lines in the group
             this._checkMarkGroup.each((line: any) => {
                 line.stroke({ color: '#FFFFFF', width: 2 });
             });
@@ -332,7 +305,6 @@ class CheckBox extends Widget {
     keyupState(keyEvent?: KeyboardEvent): void {
         this.idleupState();
         
-        // Toggle checkbox on Enter or Space key press
         if (keyEvent && (keyEvent.key === 'Enter' || keyEvent.key === ' ')) {
             this.toggle();
         }

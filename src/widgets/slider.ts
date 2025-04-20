@@ -20,12 +20,9 @@ class Slider extends Widget {
     
     constructor(parent: Window) {
         super(parent);
-        // set defaults
         this.height = this.defaultHeight;
         this.width = this.defaultWidth;
-        // set Aria role
         this.role = RoleType.none;
-        // render widget
         this.render();
     }
     
@@ -53,11 +50,9 @@ class Slider extends Widget {
             .stroke({ color: '#F58020', width: 2 })
             .center(thumbPosition, this.height / 2)
             .attr('cursor', 'pointer');
-        
-        // Add a transparent rect on top to prevent selection cursor but allow events
+
         this._group.rect(this.width, this.height).opacity(0).attr('id', 0);
-        
-        // Register events
+
         this.registerEvent(this.outerSvg);
         this.registerEvent(this._thumb);
         this.registerEvent(this._track);
@@ -65,11 +60,9 @@ class Slider extends Widget {
         // Set initial state
         this.idleupState();
         
-        // Add event listeners for thumb dragging
         this._thumb.on('mousedown', (e: MouseEvent) => this.handleThumbDown(e));
         this._track.on('click', (e: MouseEvent) => this.handleTrackClick(e));
-        
-        // Add global mousemove and mouseup for dragging
+
         window.addEventListener('mousemove', (e) => this.handleMouseMove(e));
         window.addEventListener('mouseup', () => this.handleMouseUp());
     }
@@ -83,14 +76,9 @@ class Slider extends Widget {
     private updatePosition(position: number): void {
         // Constrain position to the track width
         const constrainedPos = Math.max(0, Math.min(position, this.width));
-        
-        // Update value based on position
+
         this._value = Math.round((constrainedPos / this.width) * 100);
-        
-        // Update thumb position
         this._thumb.center(constrainedPos, this.height / 2);
-        
-        // Update active track width
         this._activeTrack.width(constrainedPos);
         
         // Trigger value change event if it exists
@@ -153,8 +141,7 @@ class Slider extends Widget {
     onValueChange(handler: (sender: Slider, args: SliderValueEventArgs) => void): void {
         this._onValueChange = handler;
     }
-    
-    // Getters and setters for value
+
     get value(): number {
         return this._value;
     }
@@ -163,8 +150,7 @@ class Slider extends Widget {
         const oldValue = this._value;
         this._value = Math.max(0, Math.min(Math.round(val), 100));
         this.updatePosition(this.getThumbPosition());
-        
-        // Trigger event handler if value actually changed
+
         if (oldValue !== this._value && this._onValueChange) {
             const args = {
                 previousValue: oldValue,
@@ -174,14 +160,13 @@ class Slider extends Widget {
         }
     }
 
-    // Public method to set the slider width
     setWidth(width: number): void {
         this.width = width;
         
         // Update the UI elements if they exist
         if (this._track && this._activeTrack) {
             this._track.width(width).center(width / 2, this.height / 2);
-            this.updatePosition(this.getThumbPosition()); // Update thumb and active track
+            this.updatePosition(this.getThumbPosition());
         }
     }
 
@@ -201,15 +186,12 @@ class Slider extends Widget {
         }
     }
     
-    // State implementations
     idleupState(): void {
         this._thumb.fill(this._thumbColor).stroke({ color: '#F58020', width: 2 });
         this._activeTrack.fill(this._trackColor);
     }
     
-    idledownState(): void {
-        // Not used for slider
-    }
+    idledownState(): void {}
     
     pressedState(): void {
         this._thumb.fill('#ffa54d').stroke({ color: '#d66a00', width: 2 });
@@ -232,14 +214,8 @@ class Slider extends Widget {
         this.idleupState();
     }
     
-    moveState(): void {
-        // Implementation for move state if needed
-    }
-    
-    keyupState(): void {
-        // Implementation for keyboard interactions
-        // You could implement arrow key navigation here
-    }
+    moveState(): void {}
+    keyupState(): void {}
 }
 
 // Event arguments for slider value changes

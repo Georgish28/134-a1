@@ -34,12 +34,12 @@ class ProgressBar extends Widget {
     private _progressRect: Rect;
     private _percentText: Text;
     
-    // Default properties
+    // Default
     private defaultWidth: number = 200;
     private defaultHeight: number = 20;
     private _value: number = 0; // Current progress value (0-100)
-    private _incrementValue: number = 10; // Default increment step
-    private _showPercentage: boolean = true; // Whether to show percentage text
+    private _incrementValue: number = 10; // Default increment
+    private _showPercentage: boolean = false; 
 
     // Callbacks for events
     private incrementCallback: ((sender: ProgressBar, args: ProgressIncrementEventArgs) => void) | null = null;
@@ -51,14 +51,8 @@ class ProgressBar extends Widget {
         // Set defaults
         this.height = this.defaultHeight;
         this.width = this.defaultWidth;
-        
-        // Set Aria role for accessibility
         this.role = RoleType.none;
-        
-        // Set default state
         this.setState(new IdleUpWidgetState());
-        
-        // Render widget
         this.render();
     }
 
@@ -68,16 +62,14 @@ class ProgressBar extends Widget {
     render(): void {
         this._group = (this.parent as Window).window.group();
         
-        // Background rectangle (empty progress bar)
         this._backgroundRect = this._group.rect(this.width, this.height)
             .fill('#FFF4E0')  // Papaya background color
             .stroke({ color: '#FFD699', width: 1 }) // Papaya border
-            .radius(4); // Apply radius to all corners
+            .radius(4);
         
-        // Progress rectangle (filled portion)
         this._progressRect = this._group.rect(this.calculateProgressWidth(), this.height)
             .fill('#FFAB5B') // Papaya progress color
-            .radius(4); // Apply radius to all corners
+            .radius(4);
         
         // Percentage text
         this._percentText = this._group.text(`${this._value}%`)
@@ -85,16 +77,11 @@ class ProgressBar extends Widget {
             .fill('#333333') // Dark gray for text
             .center(this.width / 2, this.height / 2);
         
-        // Set the outer svg element
         this.outerSvg = this._group;
-        
-        // Add a transparent rect on top to handle mouse events
         let eventRect = this._group.rect(this.width, this.height).opacity(0).attr('id', 0);
-        
-        // Register events
+
         this.registerEvent(eventRect);
-        
-        // Initial update to apply default state
+
         this.update();
     }
 
@@ -140,14 +127,11 @@ class ProgressBar extends Widget {
      */
     set value(newValue: number) {
         const previousValue = this._value;
-        
-        // Clamp value between 0 and 100
+
         this._value = Math.max(0, Math.min(100, newValue));
-        
-        // Update visual representation
+
         this.update();
-        
-        // Trigger increment event if value has changed
+
         if (this._value !== previousValue && this.incrementCallback) {
             this.incrementCallback(this, new ProgressIncrementEventArgs(this, this._value, previousValue));
         }
@@ -237,7 +221,6 @@ class ProgressBar extends Widget {
         };
     }
 
-    // State methods implementation
     idleupState(): void {
         if (this._backgroundRect) {
             this._backgroundRect.fill('#FFF4E0').stroke({ color: '#FFD699', width: 1 });

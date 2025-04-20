@@ -138,12 +138,10 @@ class RadioButton extends Widget {
             values = [...values, ...Array(2 - values.length).fill("Option")];
         }
         
-        // Update existing labels
         for (let i = 0; i < Math.min(values.length, this._items.length); i++) {
             this._items[i].label = values[i];
         }
-        
-        // Add new items if needed
+
         if (values.length > this._items.length) {
             for (let i = this._items.length; i < values.length; i++) {
                 this._items.push({
@@ -154,13 +152,11 @@ class RadioButton extends Widget {
                     labelText: null
                 });
             }
-            
-            // Re-render to add new items
+
             this.clear();
             this.render();
         }
-        
-        // Update display
+
         this.update();
     }
 
@@ -171,7 +167,6 @@ class RadioButton extends Widget {
         if (this._group) {
             this._group.clear();
             
-            // Reset visual elements
             for (const item of this._items) {
                 item.circle = null;
                 item.innerCircle = null;
@@ -193,16 +188,13 @@ class RadioButton extends Widget {
     set selectedIndex(index: number) {
         if (index >= 0 && index < this._items.length) {
             const previousIndex = this.selectedIndex;
-            
-            // Update checked states
+
             this._items.forEach((item, i) => {
                 item.checked = (i === index);
             });
             
-            // Update visual appearance
             this.update();
-            
-            // Trigger event if selection changed
+
             if (previousIndex !== index && this._onSelectionChange) {
                 this._onSelectionChange(
                     this, 
