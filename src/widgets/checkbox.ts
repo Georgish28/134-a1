@@ -101,9 +101,14 @@ class CheckBox extends Widget {
      */
     private centerLabelVertically(): void {
         if (this._labelText) {
-            const bbox = this._labelText.bbox();
-            const yPos = (this.defaultHeight - bbox.height) / 2;
-            this._labelText.y(yPos);
+            // Access the native SVG text element
+            const svgTextElement = this._labelText.node;
+            
+            // Set the dominant-baseline attribute directly
+            svgTextElement.setAttribute('dominant-baseline', 'middle');
+            
+            // Position at vertical center of checkbox
+            this._labelText.center(this._labelText.cx(), this._boxRect.cy());
         }
     }
 

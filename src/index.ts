@@ -62,14 +62,14 @@ btn.onClick((sender, args) => {
 let checkBox = new CheckBox(w);
 checkBox.label = "Accept Terms"; // This is the only place "Accept Terms" should appear
 checkBox.fontSize = 14;
-checkBox.move(30, 239);
+checkBox.move(30, 275);
 
 // CheckBox label
 let lblCheckBox = new Heading(w);
 lblCheckBox.text = "Checkbox Text: Accept Terms";
 lblCheckBox.tabindex = 5;
 lblCheckBox.fontSize = 14;
-lblCheckBox.move(165, 239);
+lblCheckBox.move(30, 300);
 
 // Event handling for checkbox
 checkBox.onCheckedChange((sender, args) => {
