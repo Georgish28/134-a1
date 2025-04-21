@@ -25,7 +25,7 @@ lblHeading.move(20, 35);
 let btn = new Button(w);
 btn.tabindex = 2;
 btn.fontSize = 14;
-btn.label = "Click Me!";
+btn.label = "Button!";
 btn.buttonHeight = 50;
 btn.buttonWidth = 100;
 btn.move(30, 100);
