@@ -34,12 +34,11 @@ btn.move(30, 100);
 let progBar = new ProgressBar(w);
 progBar.value = 0;
 progBar.move(30, 170);
-// Use appropriate method to set width if it exists on ProgressBar
 if ('setWidth' in progBar) {
     (progBar as any).setWidth(200);
 }
 
-// Progress label - Only create this once
+// Progress label
 let lblProgress = new Heading(w);
 lblProgress.text = "Progress: 0%";
 lblProgress.tabindex = 4;
@@ -58,9 +57,9 @@ btn.onClick((sender, args) => {
     progBar.increment();
 });
 
-// CheckBox widget - ONLY create this once
+// CheckBox widget
 let checkBox = new CheckBox(w);
-checkBox.label = "Accept Terms"; // This is the only place "Accept Terms" should appear
+checkBox.label = "Accept Terms"; //
 checkBox.fontSize = 14;
 checkBox.move(30, 275);
 
@@ -98,11 +97,11 @@ scrollBar.onThumbMove = (direction) => {
     console.log(`Thumb moved: ${direction}, position: ${scrollBar.thumbPosition}px`);
 };
 
-// Papaya-themed Slider widget - Create this ONLY once
+//Slider widget
 let slider = new Slider(w);
 slider.setWidth(200);
 slider.move(30, window.innerHeight - 70);
-slider.value = 40; // Set to 40% to match the image
+slider.value = 40;
 slider.trackColor = "#F58020"; // Papaya orange
 slider.thumbColor = "#FFC87C"; // Lighter papaya
 
